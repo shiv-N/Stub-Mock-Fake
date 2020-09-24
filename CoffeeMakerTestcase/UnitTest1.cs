@@ -7,16 +7,6 @@ namespace CoffeeMakerTestcase
     [TestClass]
     public class UnitTest1
     {
-        /// <summary>
-        ///  Using Fake
-        /// </summary>
-        [TestMethod]
-        public void OrderACoffee_Should_Return_Received_Message()
-        {
-            StarbuckStore store = new StarbuckStore(new FakeStarbucksStore());
-            string result = store.OrderCoffee(2, 4);
-            Assert.AreEqual("Your Order is received.",result);
-        }
 
         /// <summary>
         /// Using Mock.
@@ -30,7 +20,21 @@ namespace CoffeeMakerTestcase
             var store = new StarbuckStore(service.Object);
             var result = store.OrderCoffee(2, 4);
             Assert.AreEqual("Your Order is received.", result);
+            service.Verify(x => x.CheckIngridentAvalability());
+            service.Verify(x => x.CoffeeMaking(It.IsAny<int>(), It.IsAny<int>()));
         }
+
+        /// <summary>
+        ///  Using Fake
+        /// </summary>
+        [TestMethod]
+        public void OrderACoffee_Should_Return_Received_Message()
+        {
+            StarbuckStore store = new StarbuckStore(new FakeStarbucksStore());
+            string result = store.OrderCoffee(2, 4);
+            Assert.AreEqual("Your Order is received.",result);
+        }
+
 
         /// <summary>
         ///  Using Stub
